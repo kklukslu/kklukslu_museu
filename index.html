@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museu Virtual dos Pioneiros da Computação</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="tailwind-config.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-200 text-slate-800 flex flex-col justify-between min-h-screen selection:bg-blue-500 selection:text-white">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+        <!-- Progress Bar at top edge -->
+        <div class="w-full bg-slate-200 h-1.5 overflow-hidden">
+            <div id="tour-progress" class="bg-gradient-to-r from-purple-600 via-blue-600 to-teal-500 h-full w-0 transition-all duration-500 ease-out"></div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-2 md:gap-4">
+            <!-- Brand / Title -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-bold text-lg shadow-md">
+                    <i class="fa-solid fa-monument text-blue-400"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-slate-900 text-sm sm:text-base leading-tight tracking-tight">
+                        Museu Virtual <span class="text-blue-600">Pioneiros da Computação</span>
+                    </h1>
+                    <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <span id="current-pioneer-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                            Carregando...
+                        </span>
+                        <span id="slide-counter" class="font-medium text-slate-500">Slide 0 de 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls (Prev, Play/Pause, Next, Sound) -->
+            <div class="flex items-center gap-1 sm:gap-2">
+                <!-- Prev Button -->
+                <button id="btn-prev" onclick="app.prevSlide()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium text-xs sm:text-sm flex items-center gap-1" title="Slide Anterior">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <span class="hidden md:inline">Anterior</span>
+                </button>
+
+                <!-- Play/Pause Speech Button -->
+                <button id="btn-play-pause" onclick="app.togglePlayPause()" class="p-2 sm:px-4 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition font-medium text-xs sm:text-sm flex items-center gap-2">
+                    <i id="play-pause-icon" class="fa-solid fa-pause"></i>
+                    <span id="play-pause-text" class="hidden sm:inline">Pausar</span>
+                </button>
+
+                <!-- Next Button -->
+                <button id="btn-next" onclick="app.nextSlide()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium text-xs sm:text-sm flex items-center gap-1" title="Próximo Slide">
+                    <span class="hidden md:inline">Próximo</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+
+                <div class="h-6 w-px bg-slate-300 mx-1"></div>
+
+                <!-- Mute / Unmute Button -->
+                <button id="btn-mute" onclick="app.toggleMute()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Alternar Som">
+                    <i id="mute-icon" class="fa-solid fa-volume-high text-blue-600"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN MUSEUM CONTENT DISPLAY AREA -->
+    <main class="flex-grow max-w-5xl w-full mx-auto p-4 sm:p-6 md:p-8 flex items-center justify-center">
+        <!-- SLIDE CARD CONTAINER -->
+        <div id="slide-card" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 md:p-10 w-full min-h-[520px] flex flex-col justify-between transition-all duration-300 relative overflow-hidden">
+            <!-- Dynamic Slide Content inserted via JS -->
+            <div id="slide-content" class="fade-in flex-grow flex flex-col justify-center">
+                <!-- Initial state -->
+                <div class="text-center py-20 text-slate-400">
+                    <i class="fa-solid fa-circle-notch fa-spin text-4xl mb-4 text-blue-600"></i>
+                    <p>Inicializando o acervo do museu...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-300/60 border-t border-slate-300/80 py-4 text-center text-xs text-slate-600">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>&copy; 2026 Museu Virtual dos Pioneiros da Computação • Exposição Interativa</span>
+            <div class="flex items-center space-x-4">
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-microphone text-blue-600"></i> Sintetizador pt-BR</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-clock text-amber-600"></i> Desafios Temporizados</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script src="app.js"></script>
+</body>
+</html>
